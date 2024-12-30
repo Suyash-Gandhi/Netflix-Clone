@@ -15,8 +15,12 @@ module.exports.addToLikedMovies = async (req, res) => {
 
             } else return res.json({ msg: "Movie already added to the liked list." })
 
-        } else await User.create({ email, likedMovies: [data] })
-        return res.json({ msg: "Movie successfully added to my list." })
+        }  else {
+            const newUser = new User({ email, likedMovies: [data] });
+            await newUser.save();
+            return res.json({ msg: "Movie successfully added to my list." });
+        }
+        
 
     } catch (error) {
         console.log(error);
