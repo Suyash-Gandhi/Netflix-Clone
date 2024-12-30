@@ -52,9 +52,10 @@ export default function UserLiked() {
                 <h1>My List</h1>
                 <div className="grid flex">
                     {
-                        movies.map((movies, index) => {
-                            return <Card moviedata={movies} index={index} key={movies.id} isliked={true} />
+                        movies.map((movie, index) => {
+                            return <Card moviedata={movie} index={index} key={`${movie.id}-${index}`} isliked={true} />
                         })
+                        
                     }
                 </div>
             </div>

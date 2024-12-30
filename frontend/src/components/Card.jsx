@@ -40,20 +40,33 @@ export default React.memo(function Card({ moviedata, isliked = false }) {
 
   const addtolist = async () => {
     if (!email) {
-      console.log("User email not available.");
-      return;
+        console.log("User email not available.");
+        return;
     }
 
-    // Log the email and movie data before making the request
     console.log("Adding to list:", email, moviedata);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/user/add", { email, data: moviedata });
-      console.log("Response:", response.data);  // Log the response from the server
+        const response = await axios.post("http://localhost:5000/api/user/add", {
+            email,
+            data: {
+                id: moviedata.id,
+                name: moviedata.name,
+                image: moviedata.image,
+                genres: moviedata.genres,
+            },
+        });
+
+        if (response.status === 200) {
+            console.log("Movie added:", response.data);
+        } else {
+            console.log("Failed to add movie:", response.data.msg);
+        }
     } catch (err) {
-      console.error("Error adding to list:", err.response ? err.response.data : err.message);
+        console.error("Error adding to list:", err.response ? err.response.data : err.message);
     }
-  }
+}
+
 
 
 

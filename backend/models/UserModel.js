@@ -6,10 +6,15 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    likedMovies: {
-        type: Array,
-        default: [],
-    },
+    likedMovies: [
+        {
+            id: Number,
+            name: String,
+            image: String,
+            genres: [String],
+        }
+    ],
 });
+
 
 module.exports = mongoose.model("User", UserSchema);

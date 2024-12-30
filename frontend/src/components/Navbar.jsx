@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import styled from "styled-components"
-import logo from "../assets/logo.png"
+import React, { useState } from "react"; 
+import styled from "styled-components";
+import logo from "../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
-import { FaPowerOff, FaSearch } from "react-icons/fa"
+import { FaPowerOff, FaSearch } from "react-icons/fa";
 import { firebaseAuth } from "../utils/firebase-config";
-import { signOut,onAuthStateChanged } from "firebase/auth";
+import { signOut, onAuthStateChanged } from "firebase/auth";
+import SearchBar from "./SearchBar"; // Import the SearchBar component
 
-export default function Navbar({isscrolled}) {
+export default function Navbar({ isscrolled }) {
     const links = [
         { name: "Home", link: "/" },
         { name: "TV Shows", link: "/tv" },
@@ -14,51 +15,52 @@ export default function Navbar({isscrolled}) {
         { name: "My List", link: "/mylist" },
     ];
 
-    const navigate=useNavigate()
-     onAuthStateChanged(firebaseAuth, (currentuser) => {
-            if (!currentuser) navigate("/login")
-        })
+    const navigate = useNavigate();
+    onAuthStateChanged(firebaseAuth, (currentuser) => {
+        if (!currentuser) navigate("/login");
+    });
 
-    const [showsearch, setshowsearch] = useState(false)
-    const [inputhover, setinputhover] = useState(false)
+    const [showsearch, setshowsearch] = useState(false);
+    const [inputhover, setinputhover] = useState(false);
 
-    return <Container>
-        <nav className={`flex ${isscrolled ? "scrolled" : ""}`}>
-            <div className="left flex a-center">
-                <div className="brand flex a-center j-center">
-                    <img src={logo} alt="logo" />
-                </div>
-                <ul className="links flex">
-                    {
-                        links.map(({name, link}) => {
+    return (
+        <Container>
+            <nav className={`flex ${isscrolled ? "scrolled" : ""}`}>
+                <div className="left flex a-center">
+                    <div className="brand flex a-center j-center">
+                        <img src={logo} alt="logo" />
+                    </div>
+                    <ul className="links flex">
+                        {links.map(({ name, link }) => {
                             return (
                                 <li key={name}>
                                     <Link to={link}>{name}</Link>
                                 </li>
-                            )
-                        })
-                    }
-                </ul>
-            </div>
-            <div className="right flex a-center">
-                <div className={`search ${showsearch ? "show-search" : ""}`}>
-                    <button onFocus={() => setshowsearch(true)} onBlur={
-                        () => {
-                            if (!inputhover) setshowsearch(false)
-                        }
-                    }>
-                        <FaSearch />
-                    </button>
-                    <input type="text" placeholder="search" onMouseEnter={() => setinputhover(true)}
-                        onMouseLeave={() => setinputhover(false)} onBlur={() => { setinputhover(false); setshowsearch(false) }} />
+                            );
+                        })}
+                    </ul>
                 </div>
-                <button onClick={() => signOut(firebaseAuth)}>
-                    <FaPowerOff />
-                </button>
-            </div>
-        </nav>
-    </Container>
+                <div className="right flex a-center">
+                    <div className={`search ${showsearch ? "show-search" : ""}`}>
+                        <button
+                            onClick={() => setshowsearch(!showsearch)} // Toggle search visibility
+                        >
+                            <FaSearch />
+                        </button>
+
+                        {showsearch && (
+                            <SearchBar /> // Show SearchBar when the button is clicked
+                        )}
+                    </div>
+                    <button onClick={() => signOut(firebaseAuth)}>
+                        <FaPowerOff />
+                    </button>
+                </div>
+            </nav>
+        </Container>
+    );
 }
+
 const Container = styled.div`
 .scrolled {
     background-color: black;
@@ -104,7 +106,7 @@ const Container = styled.div`
         }
         svg {
           color: #f34242;
-          font-size: 1.2rem;
+          font-size: 1.5rem;
         }
       }
       .search {
@@ -114,6 +116,7 @@ const Container = styled.div`
         justify-content: center;
         padding: 0.2rem;
         padding-left: 0.5rem;
+         
         button {
           background-color: transparent;
           border: none;
@@ -126,10 +129,10 @@ const Container = styled.div`
           }
         }
         input {
-          width: 0;
+          width: 10%;
           opacity: 0;
           visibility: hidden;
-          transition: 0.3s ease-in-out, opacity 0.3s ease-in-out;
+         
           background-color: transparent;
           border: none;
           color: white;

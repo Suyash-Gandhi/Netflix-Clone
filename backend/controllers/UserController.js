@@ -8,18 +8,15 @@ module.exports.addToLikedMovies = async (req, res) => {
             const { likedMovies } = user
             const moviesAlreadyLiked = likedMovies.some(({ id }) => id === data.id)
             if (!moviesAlreadyLiked) {
-                await User.findByIdAndUpdate(
-                    user.id,
-                    {
-                        $push: { likedMovies: data }
-                    },
-                    { new: true }
+                likedMovies.push(data);
+                await user.save();  // Explicitly save the updated user
+                return res.json({ msg: "Movie successfully added to database." }
                 )
 
             } else return res.json({ msg: "Movie already added to the liked list." })
 
         } else await User.create({ email, likedMovies: [data] })
-        return res.json({ msg: "Movie successfully added to liked list." })
+        return res.json({ msg: "Movie successfully added to my list." })
 
     } catch (error) {
         console.log(error);
