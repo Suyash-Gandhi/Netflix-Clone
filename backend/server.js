@@ -6,11 +6,13 @@ const userroutes = require("./routes/UserRoutes");
 const app = express();
 
 // Use CORS to allow cross-origin requests
-app.use(cors({
-    origin: "http://localhost:5173",  // Allow React frontend
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-}));
+const corsOptions = {
+    origin: ['http://localhost:5173', 'https://netflix-clone-frontend-rrp4.onrender.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  };
+  
+  app.use(cors(corsOptions));
+  
 
 app.use(express.json());
 
