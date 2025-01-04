@@ -63,13 +63,16 @@ export const fetchDataByGenre = createAsyncThunk("netflix/moviesbygenres", async
     return  getrawdata (`${ TMBD_BASE_URL}/discover/${type}?api_key=${API_KEY}&with_genres=${genre}`,genres)
 });
 
+const BASE_URL = `${import.meta.env.REACT_APP_API_URL || "http://localhost:5000"}`;
+
+
 export const getuserlikedmovies=createAsyncThunk("netflix/getliked",async(email)=>{
-    const {data:{movies}}=await axios.get(`http://localhost:5000/api/user/liked/${email}`)
+    const {data:{movies}}=await axios.get(`${BASE_URL}/api/user/liked/${email}`)
   return movies
 })
 
 export const removeLikedMovies=createAsyncThunk("netflix/deleteliked",async({email,movieId})=>{
-    const {data:{movies}}=await axios.put(`http://localhost:5000/api/user/delete/`,{
+    const {data:{movies}}=await axios.put(`${BASE_URL}/api/user/delete/`,{
         email,movieId
     })
   return movies
